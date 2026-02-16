@@ -23,4 +23,18 @@ public class Pragati {
     public void transitionTo(PragatiState newState) {
         this.state = newState;
     }
+    private long movementEndTime = 0;
+
+public void startMovement(long endTime) {
+    this.state = PragatiState.MOVING;
+    this.movementEndTime = endTime;
+}
+
+public void update(long now) {
+    if (state == PragatiState.MOVING && now >= movementEndTime) {
+        this.state = PragatiState.IDLE;
+        this.movementEndTime = 0;
+    }
+}
+
 }

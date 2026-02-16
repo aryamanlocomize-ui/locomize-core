@@ -1,22 +1,27 @@
 package com.locomize.kernel;
 
+import java.util.List;
+
 import com.locomize.model.Pragati;
-import com.locomize.model.PragatiState;
+import com.locomize.model.TrackSection;
 import com.locomize.scheduler.Scheduler;
 import com.locomize.trajectory.TrajectoryPacket;
-
-import java.util.List;
 
 public class Kernel {
 
     private final Scheduler scheduler;
     private final List<Pragati> pragatis;
+    private final List<TrackSection> trackSections;
 
     private final long intervalSeconds = 60;
 
-    public Kernel(Scheduler scheduler, List<Pragati> pragatis) {
+    public Kernel(Scheduler scheduler,
+                  List<Pragati> pragatis,
+                  List<TrackSection> trackSections) {
+
         this.scheduler = scheduler;
         this.pragatis = pragatis;
+        this.trackSections = trackSections;
     }
 
     public void runOneTick(long intervalStart) {
@@ -27,7 +32,7 @@ public class Kernel {
         System.out.println("Kernel tick: " + intervalStart + " → " + intervalEnd);
 
         List<TrajectoryPacket> packets =
-                scheduler.planNextInterval(intervalStart, intervalEnd, pragatis);
+                scheduler.planNextInterval(intervalStart, intervalEnd, pragatis, trackSections);
 
         applyPackets(packets, intervalStart);
 
